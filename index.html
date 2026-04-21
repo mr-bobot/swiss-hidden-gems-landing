@@ -106,13 +106,13 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding: 0 22px;
+    padding: 0 14px;
     scrollbar-width: none;
   }
   .carousel::-webkit-scrollbar { display: none; }
   .carousel .slide {
-    flex: 0 0 calc(100% - 44px);
-    aspect-ratio: 16 / 9;
+    flex: 0 0 calc(100% - 28px);
+    aspect-ratio: 16 / 10;
     border-radius: var(--radius-card);
     background-color: var(--surface);
     scroll-snap-align: center;
@@ -162,6 +162,23 @@
     font-size: 14px;
     line-height: 1.55;
     color: var(--muted);
+    letter-spacing: -0.005em;
+  }
+
+  /* Audience chips */
+  .audiences {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    justify-content: flex-start;
+  }
+  .audiences span {
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--fg);
+    font-weight: 500;
     letter-spacing: -0.005em;
   }
 
@@ -427,6 +444,12 @@
     <p class="desc">
       Most of the best places in Switzerland aren't on the tourist map. They're in local WhatsApp groups, in photographers' heads and on trails that never make the internet. 100+ of them are in here.
     </p>
+  </div>
+
+  <div class="px audiences">
+    <span>📸 Photographers</span>
+    <span>🥾 Hikers</span>
+    <span>⛺️ Wildcampers</span>
   </div>
 
   <div class="px plans">
