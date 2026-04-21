@@ -56,14 +56,16 @@
     gap: 8px;
   }
   .header .avatar {
-    width: 24px; height: 24px;
+    width: 26px; height: 26px;
     border-radius: 999px;
-    background: linear-gradient(135deg,#a1a1a6,#1d1d1f);
-    color: #fff;
-    font-weight: 600;
-    font-size: 11px;
-    display: grid; place-items: center;
-    letter-spacing: 0;
+    background: #1d1d1f;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .header .avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   /* Hero text */
@@ -156,10 +158,10 @@
   /* Description */
   p.desc {
     margin: 0;
-    font-size: 17px;
-    line-height: 1.5;
-    color: var(--fg);
-    letter-spacing: -0.015em;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    letter-spacing: -0.005em;
   }
 
   /* Audience chips */
@@ -332,6 +334,61 @@
   }
   .success.show { display: block; }
 
+  /* FAQ */
+  .faq {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 8px;
+  }
+  .faq h2 {
+    font-family: "SF Pro Display", -apple-system, system-ui, sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+  .faq details {
+    border-top: 1px solid var(--hairline);
+    padding: 14px 0;
+  }
+  .faq details:last-of-type { border-bottom: 1px solid var(--hairline); }
+  .faq summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq .chev {
+    width: 10px; height: 10px;
+    border-right: 1.5px solid var(--muted);
+    border-bottom: 1.5px solid var(--muted);
+    transform: rotate(45deg);
+    transition: transform 200ms ease;
+    margin-right: 4px;
+    margin-top: -4px;
+    flex-shrink: 0;
+  }
+  .faq details[open] .chev {
+    transform: rotate(-135deg);
+    margin-top: 2px;
+  }
+  .faq details p {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--muted);
+    letter-spacing: -0.005em;
+  }
+
   .fineprint {
     font-size: 12px;
     color: var(--muted);
@@ -351,10 +408,9 @@
 <main>
   <div class="header">
     <div class="creator">
-      <div class="avatar">H</div>
-      <span>Hikebeast</span>
+      <div class="avatar"><img src="images/avatar.jpg" alt="" /></div>
+      <span>Hikebeast · Leon Helg</span>
     </div>
-    <span>Leon Helg</span>
   </div>
 
   <div class="carousel-wrap">
@@ -383,7 +439,7 @@
 
   <div class="px">
     <p class="desc">
-      Most of the best places in Switzerland aren't on the tourist map. They're in local WhatsApp groups, in photographers' heads and on trails that never make the internet.
+      Most of the best places in Switzerland aren't on the tourist map. They're in local WhatsApp groups, in photographers' heads and on trails that never make the internet. 100+ of them are in here.
     </p>
   </div>
 
@@ -451,6 +507,30 @@
       </a>
     </div>
   </div>
+
+  <section class="px faq">
+    <h2>Frequently asked</h2>
+    <details>
+      <summary>Will you update the guide?<span class="chev"></span></summary>
+      <p>Yes — lifetime updates are included. Whenever I add a new spot or refine an entry, it lands in your guide automatically. No re-buying, ever.</p>
+    </details>
+    <details>
+      <summary>How do I get the guide after buying?<span class="chev"></span></summary>
+      <p>Instant access. After checkout you get a link that works on iPhone, Android, or desktop — no downloads or account setup beyond the purchase.</p>
+    </details>
+    <details>
+      <summary>Do I need to be a serious hiker?<span class="chev"></span></summary>
+      <p>No. Every spot lists difficulty, duration and what to bring, so you can pick ones that match your level — from 20-minute walks to full alpine days.</p>
+    </details>
+    <details>
+      <summary>Can I camp at these spots?<span class="chev"></span></summary>
+      <p>The full guide marks every spot with the current rules — where wildcamping is allowed, tolerated, or off-limits — so you don't end up with a fine at 5am.</p>
+    </details>
+    <details>
+      <summary>What's the community access?<span class="chev"></span></summary>
+      <p>A private space where readers share their own finds, seasonal tips and recent photos. Included with the full guide.</p>
+    </details>
+  </section>
 
   <p class="px fineprint">Unsubscribe anytime. No spam.</p>
   <footer class="px">© Hikebeast</footer>
