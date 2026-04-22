@@ -386,6 +386,9 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     pointer-events: auto;
     margin-bottom: 10px;
   }
+  form.free.revealed .email-slot {
+    overflow: visible;
+  }
   form.free input[type="email"] {
     width: 100%;
     height: 50px;
@@ -730,7 +733,10 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     form.classList.add("expanded");
     btn.textContent = "Send it to me";
     const input = form.querySelector("input[type=email]");
-    setTimeout(() => input.focus({ preventScroll: true }), 320);
+    setTimeout(() => {
+      input.focus({ preventScroll: true });
+      form.classList.add("revealed");
+    }, 320);
     if (window.fbq) fbq('track', 'AddToCart', {
       content_name: 'Swiss Hidden Gems Free Sample',
       content_category: 'Guide'
