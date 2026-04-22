@@ -7,11 +7,18 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "Leon Helg <leon@hikebeast.ch>";
 const REPLY_TO = "leon@hikebeast.ch";
 const SITE = "https://hikebeast.ch";
-const UPSELL = "https://whop.com/gorped/hidden-gems-switzerland-e8/";
 const HERO_IMG = `${SITE}/images/thumb-free.jpg`;
 const FONT = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif";
 
-const html = (link) => `<!doctype html>
+const buyLink = (token, subscriberId) => {
+  const params = new URLSearchParams();
+  if (token) params.set("t", token);
+  if (subscriberId) params.set("s", subscriberId);
+  const qs = params.toString();
+  return qs ? `${SITE}/api/buy?${qs}` : `${SITE}/api/buy`;
+};
+
+const html = (link, upsell) => `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -45,7 +52,7 @@ const html = (link) => `<!doctype html>
               <hr style="border:0;border-top:1px solid rgba(0,0,0,0.08);margin:0 0 24px;" />
               <p style="margin:0 0 10px;font-size:12px;font-weight:600;color:#6e6e73;letter-spacing:0.08em;text-transform:uppercase;">Ready for the full map?</p>
               <p style="margin:0 0 14px;font-size:14px;color:#6e6e73;line-height:1.5;">The full edition has 100+ hidden gems with exact GPS coordinates, wildcamp rules, best time of day &amp; year, and lifetime updates.</p>
-              <p style="margin:0;"><a href="${UPSELL}" style="color:#0071e3;text-decoration:none;font-weight:500;font-size:14px;">Get the full guide for $49 →</a></p>
+              <p style="margin:0;"><a href="${upsell}" style="color:#0071e3;text-decoration:none;font-weight:500;font-size:14px;">Get the full guide for $49 →</a></p>
             </td>
           </tr>
         </table>
@@ -63,7 +70,7 @@ const html = (link) => `<!doctype html>
 </body>
 </html>`;
 
-const text = (link) => `Hey,
+const text = (link, upsell) => `Hey,
 
 Here is your download link to the free sample of the guide:
 
@@ -78,7 +85,7 @@ Leon
 
 Ready for the full map?
 The full edition has 100+ hidden gems with exact GPS coordinates, wildcamp rules, best time of day & year, and lifetime updates.
-Get the full guide for $49: ${UPSELL}
+Get the full guide for $49: ${upsell}
 
 © Hikebeast · Leon Helg
 ${SITE}/imprint.html · ${SITE}/privacy.html
@@ -120,6 +127,7 @@ export default async function handler(req, res) {
   const link = subscriber_id
     ? `${SITE}/api/g?t=${token}&s=${encodeURIComponent(subscriber_id)}`
     : `${SITE}/api/g?t=${token}`;
+  const upsell = buyLink(token, subscriber_id);
   const sentAt = new Date().toISOString();
 
   try {
@@ -128,8 +136,8 @@ export default async function handler(req, res) {
       to: email,
       replyTo: REPLY_TO,
       subject: "Hidden Gems - Your download link is ready.",
-      html: html(link),
-      text: text(link),
+      html: html(link, upsell),
+      text: text(link, upsell),
     });
     if (error) {
       console.error("Resend error:", error);
