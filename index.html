@@ -404,6 +404,30 @@
     color: var(--muted);
     text-align: center;
     margin-top: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .imprint {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hairline);
+    line-height: 1.5;
+  }
+  .imprint-title {
+    font-weight: 600;
+    color: var(--fg);
+    margin-bottom: 2px;
+    letter-spacing: -0.005em;
+  }
+  .imprint a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .copyright {
+    padding-top: 4px;
   }
 </style>
 </head>
@@ -536,7 +560,16 @@
   </section>
 
   <p class="px fineprint">Unsubscribe anytime. No spam.</p>
-  <footer class="px">© Hikebeast</footer>
+
+  <footer class="px">
+    <div class="imprint">
+      <div class="imprint-title">Imprint</div>
+      <div>Saftladen GmbH</div>
+      <div>Birkenstrasse 47, 6343 Rotkreuz, Switzerland</div>
+      <div><a href="mailto:office@gorped.com">office@gorped.com</a></div>
+    </div>
+    <div class="copyright">© Hikebeast</div>
+  </footer>
 </main>
 
 <script>
