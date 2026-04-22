@@ -31,11 +31,11 @@ const html = (link) => `<!doctype html>
           <tr>
             <td style="padding:32px;font-family:${FONT};color:#1d1d1f;line-height:1.5;letter-spacing:-0.01em;">
               <p style="margin:0 0 16px;font-size:16px;">Hey,</p>
-              <p style="margin:0 0 24px;font-size:16px;">Thanks for grabbing the Swiss Hidden Gems free sample. 15 of my favorite spots, ready to download.</p>
+              <p style="margin:0 0 24px;font-size:16px;">Here is your download link to the free sample of the guide:</p>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;">
                 <tr>
                   <td style="border-radius:999px;background:#0071e3;">
-                    <a href="${link}" style="display:inline-block;padding:14px 28px;color:#ffffff;text-decoration:none;font-family:${FONT};font-size:16px;font-weight:600;letter-spacing:-0.01em;">Download the guide</a>
+                    <a href="${link}" style="display:inline-block;padding:14px 28px;color:#ffffff;text-decoration:none;font-family:${FONT};font-size:16px;font-weight:600;letter-spacing:-0.01em;">Download the Free Sample</a>
                   </td>
                 </tr>
               </table>
@@ -65,7 +65,7 @@ const html = (link) => `<!doctype html>
 
 const text = (link) => `Hey,
 
-Thanks for grabbing the Swiss Hidden Gems free sample. 15 of my favorite spots, ready to download:
+Here is your download link to the free sample of the guide:
 
 ${link}
 

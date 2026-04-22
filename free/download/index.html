@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#ffffff" />
+<meta name="color-scheme" content="light only" />
 <title>Your Swiss Hidden Gems sample · Hikebeast</title>
 <meta name="robots" content="noindex" />
 <link rel="icon" type="image/jpeg" href="../../images/favicon.jpg" />
@@ -27,8 +28,9 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
 <!-- End Meta Pixel Code -->
 <style>
   *,*::before,*::after { box-sizing: border-box; }
-  html,body { margin: 0; padding: 0; }
+  html,body { margin: 0; padding: 0; background: #ffffff; }
   :root {
+    color-scheme: light;
     --bg: #ffffff;
     --surface: #f5f5f7;
     --fg: #1d1d1f;
@@ -108,8 +110,36 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   .card.upsell {
     background: #1d1d1f;
     color: #f5f5f7;
+    gap: 18px;
   }
   .card.upsell .card-sub { color: #a1a1a6; }
+  .plan-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .plan-name {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .plan-tag {
+    font-size: 13px;
+    color: #a1a1a6;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  .plan-price {
+    text-align: right;
+    line-height: 1;
+  }
+  .plan-price b {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    display: block;
+  }
 
   .cta {
     display: flex;
@@ -136,6 +166,16 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   .cta-dark {
     background: #f5f5f7;
     color: #1d1d1f;
+  }
+  .cta-secondary {
+    background: var(--surface);
+    color: var(--fg);
+  }
+
+  .download-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .divider {
@@ -230,13 +270,21 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     <p class="lead">15 hand-picked Swiss spots to get you started.</p>
   </div>
 
-  <a class="cta cta-primary" id="downloadBtn" href="/sample.pdf" download>Download the guide (PDF)</a>
+  <div class="download-group">
+    <a class="cta cta-primary" id="downloadBtn" href="/sample.pdf" download="Swiss-Hidden-Gems-Sample.pdf">Download the guide (PDF)</a>
+    <a class="cta cta-secondary" id="previewBtn" href="/preview.pdf" target="_blank" rel="noopener">Open preview instead</a>
+  </div>
 
   <div class="divider">Ready for the full map?</div>
 
   <div class="card upsell">
-    <h2 class="card-title" style="color:#fff;">Swiss Hidden Gems · Full Guide</h2>
-    <p class="card-sub">Everything you need to find the spots only locals know.</p>
+    <div class="plan-head">
+      <div>
+        <div class="plan-name">Full guide</div>
+        <div class="plan-tag">Lifetime access</div>
+      </div>
+      <div class="plan-price"><b>$49</b></div>
+    </div>
     <ul class="feat">
       <li><span class="ico">✓</span><b>100+</b>&nbsp;secret locations</li>
       <li><span class="ico">✓</span>Exact GPS coordinates for every spot</li>
@@ -244,12 +292,12 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
       <li><span class="ico">✓</span>Wildcamping legal info</li>
       <li><span class="ico">✓</span>Lifetime updates</li>
     </ul>
-    <a class="cta cta-dark" id="upsellBtn" href="https://whop.com/gorped/hidden-gems-switzerland-e8/" target="_blank" rel="noopener">Get the full guide · $49</a>
+    <a class="cta cta-dark" id="upsellBtn" href="https://whop.com/gorped/hidden-gems-switzerland-e8/" target="_blank" rel="noopener">Get the full guide</a>
   </div>
 
   <div class="card">
     <h2 class="card-title">The Hikebeast community</h2>
-    <p class="card-sub">A free Whop space where readers share their own finds, seasonal tips and recent photos.</p>
+    <p class="card-sub">A free community where readers share their own secret spots.</p>
     <ul class="feat">
       <li><span class="ico">✓</span>Free to join</li>
       <li><span class="ico">✓</span>New spots shared weekly by readers</li>
@@ -273,6 +321,15 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   const token = params.get("t") || "";
   const subscriberId = params.get("s") || "";
   const via = params.get("via") || (token ? "email" : (subscriberId ? "manychat" : "direct"));
+
+  if (via === "email" && (token || subscriberId)) {
+    fetch("/api/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, subscriber_id: subscriberId }),
+      keepalive: true,
+    }).catch(() => {});
+  }
 
   document.getElementById("downloadBtn").addEventListener("click", () => {
     fetch("/api/download", {
