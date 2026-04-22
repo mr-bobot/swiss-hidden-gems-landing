@@ -41,6 +41,15 @@
   }
   .px { padding-left: 22px; padding-right: 22px; }
 
+  /* Layout wrappers — stack on mobile, two-column on desktop */
+  .top-layout,
+  .hero-col,
+  .purchase-col {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
   /* Header */
   .header {
     display: flex;
@@ -56,11 +65,11 @@
     gap: 8px;
   }
   .header .avatar {
-    width: 26px; height: 26px;
+    width: 36px; height: 36px;
     border-radius: 999px;
-    background: #1d1d1f;
     overflow: hidden;
     flex-shrink: 0;
+    transform: translateZ(0);
   }
   .header .avatar img {
     width: 100%; height: 100%;
@@ -408,6 +417,59 @@
     flex-direction: column;
     gap: 18px;
   }
+
+  /* Desktop layout */
+  @media (min-width: 900px) {
+    body {
+      background:
+        radial-gradient(900px 500px at 20% 0%, #eef1f5 0%, transparent 60%),
+        radial-gradient(700px 500px at 85% 10%, #f0ece6 0%, transparent 55%),
+        var(--bg);
+    }
+    main {
+      max-width: 1080px;
+      padding: 40px 0 72px;
+      gap: 56px;
+    }
+    .px { padding-left: 40px; padding-right: 40px; }
+    .header { padding-left: 40px; padding-right: 40px; }
+
+    .top-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      column-gap: 56px;
+      row-gap: 0;
+      align-items: start;
+      padding: 0 40px;
+    }
+    .hero-col { gap: 32px; }
+    .hero-col .px { padding-left: 0; padding-right: 0; }
+
+    .purchase-col {
+      position: sticky;
+      top: 40px;
+      padding: 0;
+    }
+
+    .carousel { padding: 0; }
+    .carousel .slide { flex-basis: 100%; }
+    .carousel-wrap { gap: 18px; }
+
+    h1 { font-size: 36px; letter-spacing: -0.03em; }
+    .tagline { font-size: 18px; }
+    .desc { font-size: 15px; max-width: 560px; }
+
+    .faq { max-width: 720px; margin: 16px auto 0; }
+    .fineprint { max-width: 720px; margin: 0 auto; }
+    footer {
+      max-width: 720px;
+      margin: 8px auto 0;
+    }
+
+    .plan { padding: 24px; }
+    .plan-name { font-size: 20px; }
+    .plan-price b { font-size: 26px; }
+  }
   .imprint {
     display: flex;
     flex-direction: column;
@@ -436,47 +498,50 @@
   <div class="header">
     <div class="creator">
       <div class="avatar"><img src="images/avatar.jpg" alt="" /></div>
-      <span>Hikebeast · Leon Helg</span>
+      <span>Leon Helg</span>
     </div>
   </div>
 
-  <div class="carousel-wrap">
-    <div class="carousel" id="carousel" aria-label="Product preview">
-      <div class="slide"><img src="images/6.jpg" alt="" loading="lazy" /></div>
-      <div class="slide"><img src="images/5.jpg" alt="" loading="lazy" /></div>
-      <div class="slide"><img src="images/4.jpg" alt="" loading="lazy" /></div>
-      <div class="slide"><img src="images/3.jpg" alt="" loading="lazy" /></div>
-      <div class="slide"><img src="images/2.jpg" alt="" loading="lazy" /></div>
-      <div class="slide"><img src="images/1.jpg" alt="" loading="lazy" /></div>
+  <div class="top-layout">
+    <div class="hero-col">
+      <div class="carousel-wrap">
+        <div class="carousel" id="carousel" aria-label="Product preview">
+          <div class="slide"><img src="images/6.jpg" alt="" loading="lazy" /></div>
+          <div class="slide"><img src="images/5.jpg" alt="" loading="lazy" /></div>
+          <div class="slide"><img src="images/4.jpg" alt="" loading="lazy" /></div>
+          <div class="slide"><img src="images/3.jpg" alt="" loading="lazy" /></div>
+          <div class="slide"><img src="images/2.jpg" alt="" loading="lazy" /></div>
+          <div class="slide"><img src="images/1.jpg" alt="" loading="lazy" /></div>
+        </div>
+        <div class="dots" id="dots" aria-hidden="true">
+          <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="px hero-text">
+        <h1>Swiss Hidden Gems 🇨🇭</h1>
+        <p class="tagline">Switzerland beyond the tourist map.</p>
+        <div class="meta">
+          <span class="stars">★★★★★</span>
+          <span class="sep"></span>
+          <span>5.0 · 4 reviews</span>
+        </div>
+      </div>
+
+      <div class="px">
+        <p class="desc">
+          Most of the best places in Switzerland aren't on the tourist map. They're in local WhatsApp groups, in photographers' heads and on trails that never make the internet. 100+ of them are in here.
+        </p>
+      </div>
+
+      <div class="px audiences">
+        <span>📸 Photographers</span>
+        <span>🥾 Hikers</span>
+        <span>⛺️ Wildcampers</span>
+      </div>
     </div>
-    <div class="dots" id="dots" aria-hidden="true">
-      <span class="active"></span><span></span><span></span><span></span><span></span><span></span>
-    </div>
-  </div>
 
-  <div class="px hero-text">
-    <h1>Swiss Hidden Gems 🇨🇭</h1>
-    <p class="tagline">Switzerland beyond the tourist map.</p>
-    <div class="meta">
-      <span class="stars">★★★★★</span>
-      <span class="sep"></span>
-      <span>5.0 · 4 reviews</span>
-    </div>
-  </div>
-
-  <div class="px">
-    <p class="desc">
-      Most of the best places in Switzerland aren't on the tourist map. They're in local WhatsApp groups, in photographers' heads and on trails that never make the internet. 100+ of them are in here.
-    </p>
-  </div>
-
-  <div class="px audiences">
-    <span>📸 Photographers</span>
-    <span>🥾 Hikers</span>
-    <span>⛺️ Wildcampers</span>
-  </div>
-
-  <div class="px plans">
+    <div class="purchase-col px plans">
     <!-- Free plan -->
     <div class="plan">
       <div class="plan-head">
@@ -532,6 +597,7 @@
       <a class="cta-primary" href="https://whop.com/gorped/hidden-gems-switzerland-e8/" target="_blank" rel="noopener">
         Get the full guide
       </a>
+    </div>
     </div>
   </div>
 
