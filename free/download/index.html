@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#ffffff" />
+<title>Your Swiss Hidden Gems sample — Hikebeast</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/jpeg" href="../../images/favicon.jpg" />
+<link rel="apple-touch-icon" href="../../images/favicon.jpg" />
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1658000685240569');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+  html,body { margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --fg: #1d1d1f;
+    --muted: #6e6e73;
+    --hairline: rgba(0,0,0,0.08);
+    --accent: #0071e3;
+    --success: #34c759;
+    --radius-card: 20px;
+    --radius-btn: 980px;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100dvh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.47;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+  }
+  main {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 32px 22px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .check {
+    width: 56px; height: 56px;
+    border-radius: 999px;
+    background: rgba(52,199,89,0.14);
+    color: var(--success);
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  h1 {
+    font-family: "SF Pro Display", -apple-system, system-ui, sans-serif;
+    font-size: clamp(28px, 7vw, 34px);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin: 0;
+    font-weight: 600;
+  }
+  p.lead {
+    margin: 0;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .card {
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .card-sub {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .card.upsell {
+    background: #1d1d1f;
+    color: #f5f5f7;
+  }
+  .card.upsell .card-sub { color: #a1a1a6; }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 52px;
+    padding: 0 22px;
+    border-radius: var(--radius-btn);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    border: 0;
+    font-family: inherit;
+    transition: transform 120ms ease, opacity 120ms ease;
+  }
+  .cta:active { transform: scale(0.98); opacity: 0.9; }
+  .cta-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .cta-dark {
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--hairline);
+  }
+
+  footer {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .legal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--hairline);
+    font-size: 13px;
+  }
+  .legal a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .legal a:hover { color: var(--fg); }
+  .legal-sep { color: var(--muted); }
+
+  @media (min-width: 700px) {
+    main {
+      max-width: 520px;
+      padding: 64px 40px 80px;
+      gap: 36px;
+    }
+    h1 { font-size: 36px; }
+    .card { padding: 26px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="check">✓</div>
+  <div>
+    <h1>Your sample is ready.</h1>
+    <p class="lead">15 hand-picked Swiss spots to get you started.</p>
+  </div>
+
+  <div class="card">
+    <h2 class="card-title">Swiss Hidden Gems — Free Sample</h2>
+    <p class="card-sub">Tap below to download the PDF. Save it to your phone for offline use on the trail.</p>
+    <a class="cta cta-primary" id="downloadBtn" href="/sample.pdf" download>Download the guide (PDF)</a>
+  </div>
+
+  <div class="divider">Ready for the full map?</div>
+
+  <div class="card upsell">
+    <h2 class="card-title" style="color:#fff;">Swiss Hidden Gems — Full Guide</h2>
+    <p class="card-sub">100+ secret locations, exact GPS coordinates, best time of day &amp; year, wildcamping rules, and lifetime updates. $49, one-time.</p>
+    <a class="cta cta-dark" id="upsellBtn" href="https://whop.com/gorped/hidden-gems-switzerland-e8/" target="_blank" rel="noopener">Get the full guide — $49</a>
+  </div>
+
+  <footer>
+    <nav class="legal">
+      <a href="../../imprint.html">Imprint</a>
+      <span class="legal-sep">·</span>
+      <a href="../../privacy.html">Privacy</a>
+    </nav>
+    <div>© Hikebeast</div>
+  </footer>
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("t") || "";
+  const subscriberId = params.get("s") || "";
+  const via = params.get("via") || (token ? "email" : (subscriberId ? "manychat" : "direct"));
+
+  document.getElementById("downloadBtn").addEventListener("click", () => {
+    fetch("/api/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, subscriber_id: subscriberId, via }),
+      keepalive: true,
+    }).catch(() => {});
+    if (window.fbq) fbq('track', 'ViewContent', {
+      content_name: 'Swiss Hidden Gems Free Sample Download',
+      content_category: 'Guide'
+    });
+  });
+  document.getElementById("upsellBtn").addEventListener("click", () => {
+    if (window.fbq) fbq('track', 'InitiateCheckout', {
+      content_name: 'Swiss Hidden Gems',
+      content_category: 'Guide',
+      value: 49.00,
+      currency: 'USD'
+    });
+  });
+</script>
+</body>
+</html>

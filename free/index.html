@@ -364,37 +364,30 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   }
   .cta-secondary:active { transform: scale(0.98); opacity: 0.8; }
 
-  /* Free form — animated reveal */
-  .cta-secondary#revealEmail,
-  form.free {
-    overflow: hidden;
-    transition: max-height 320ms cubic-bezier(0.2, 0, 0, 1), opacity 220ms ease, margin 320ms ease;
-  }
-  .cta-secondary#revealEmail {
-    max-height: 50px;
-  }
-  .cta-secondary#revealEmail.collapsed {
-    max-height: 0;
-    opacity: 0;
-    pointer-events: none;
-    padding-top: 0;
-    padding-bottom: 0;
-    border-width: 0;
-  }
+  /* Free form — button stays at bottom, input animates in above */
   form.free {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    margin-top: auto;
+  }
+  .email-slot {
     max-height: 0;
     opacity: 0;
+    overflow: hidden;
     pointer-events: none;
+    margin-bottom: 0;
+    transition: max-height 320ms cubic-bezier(0.2, 0, 0, 1),
+                opacity 220ms ease,
+                margin-bottom 320ms cubic-bezier(0.2, 0, 0, 1);
   }
-  form.free.expanded {
-    max-height: 220px;
+  form.free.expanded .email-slot {
+    max-height: 52px;
     opacity: 1;
     pointer-events: auto;
+    margin-bottom: 10px;
   }
   form.free input[type="email"] {
+    width: 100%;
     height: 50px;
     padding: 0 18px;
     border-radius: var(--radius-btn);
@@ -405,13 +398,14 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     font-family: inherit;
     outline: none;
     letter-spacing: -0.01em;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
+    transition: border-color 150ms ease;
   }
   form.free input[type="email"]:focus {
     border-color: var(--fg);
   }
   .success {
     display: none;
+    margin-top: auto;
     padding: 14px;
     border-radius: var(--radius-card);
     background: rgba(52,199,89,0.12);
@@ -624,20 +618,20 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
         <li><span class="ico">✓</span>Delivered instantly by email</li>
       </ul>
 
-      <button class="cta-secondary" id="revealEmail" type="button">Get the free sample</button>
-
       <form class="free" id="freeForm" action="/api/sample" method="POST" novalidate>
-        <input
-          id="email"
-          type="email"
-          name="email"
-          required
-          autocomplete="email"
-          inputmode="email"
-          placeholder="Email address"
-        />
-        <input type="hidden" name="_subject" value="Free sample request for Swiss Hidden Gems" />
-        <button class="cta-primary" type="submit">Send it to me</button>
+        <div class="email-slot">
+          <input
+            id="email"
+            type="email"
+            name="email"
+            required
+            autocomplete="email"
+            inputmode="email"
+            placeholder="Email address"
+          />
+        </div>
+        <input type="hidden" id="subscriberId" name="subscriber_id" value="" />
+        <button class="cta-primary" id="freeBtn" type="submit">Get the free sample</button>
       </form>
 
       <div class="success" id="success">
@@ -707,10 +701,29 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
 <script>
   const form = document.getElementById("freeForm");
   const success = document.getElementById("success");
-  const reveal = document.getElementById("revealEmail");
-  reveal.addEventListener("click", () => {
-    reveal.classList.add("collapsed");
+  const btn = document.getElementById("freeBtn");
+  const subscriberInput = document.getElementById("subscriberId");
+
+  // Capture ?s=<subscriber_id> from URL (ManyChat link context)
+  const subscriberId = new URLSearchParams(window.location.search).get("s");
+  if (subscriberId) {
+    subscriberInput.value = subscriberId;
+    // Log landing (ManyChat → site visit) — fire and forget
+    fetch("/api/visit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subscriber_id: subscriberId }),
+      keepalive: true,
+    }).catch(() => {});
+  }
+
+  let revealed = false;
+  btn.addEventListener("click", (e) => {
+    if (revealed) return;
+    e.preventDefault();
+    revealed = true;
     form.classList.add("expanded");
+    btn.textContent = "Send it to me";
     const input = form.querySelector("input[type=email]");
     setTimeout(() => input.focus({ preventScroll: true }), 320);
     if (window.fbq) fbq('track', 'AddToCart', {
@@ -718,20 +731,21 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
       content_category: 'Guide'
     });
   });
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const btn = form.querySelector("button[type=submit]");
     btn.disabled = true;
     btn.textContent = "Sending…";
     try {
       const email = form.querySelector("input[name=email]").value;
+      const subscriber_id = subscriberInput.value || null;
       const res = await fetch(form.action, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ email, subscriber_id })
       });
       if (!res.ok) throw new Error("bad response");
-      form.classList.remove("expanded");
+      form.style.display = "none";
       success.classList.add("show");
       if (window.fbq) fbq('track', 'Lead', {
         content_name: 'Swiss Hidden Gems Free Sample',
