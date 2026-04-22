@@ -2,11 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Using Resend's default sandbox sender until hikebeast.ch is verified
-// in Resend. In sandbox mode you can only send to the email you signed
-// up to Resend with. Once the domain is verified, swap FROM to
-// "Leon Helg <leon@hikebeast.ch>" — replies will land in Leon's inbox.
-const FROM = "Leon Helg <onboarding@resend.dev>";
+const FROM = "Leon Helg <leon@hikebeast.ch>";
 const REPLY_TO = "leon@hikebeast.ch";
 const SAMPLE_URL = "https://hikebeast.ch/sample.pdf";
 
@@ -40,7 +36,7 @@ export default async function handler(req, res) {
     });
     if (error) {
       console.error("Resend error:", error);
-      return res.status(500).json({ error: "Email failed to send", detail: error });
+      return res.status(500).json({ error: "Email failed to send" });
     }
     return res.status(200).json({ ok: true });
   } catch (err) {
