@@ -49,15 +49,14 @@
     gap: 28px;
   }
 
-  /* Info bar (below carousel) */
+  /* Info bar (below carousel) — Whop-style rounded rectangle with two equal halves */
   .info-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 10px 18px;
-    border-radius: 999px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    border-radius: 12px;
     background: var(--surface);
+    overflow: hidden;
     font-size: 14px;
     font-weight: 500;
     color: var(--fg);
@@ -67,15 +66,15 @@
   .info-bar .info-right {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    padding: 14px 16px;
+  }
+  .info-bar .info-right {
+    border-left: 1px solid rgba(0,0,0,0.08);
   }
   .info-bar .icon-tag {
     color: var(--muted);
-  }
-  .info-bar .info-sep {
-    width: 1px;
-    height: 14px;
-    background: rgba(0,0,0,0.1);
   }
   .info-bar .info-avatar {
     width: 22px; height: 22px;
@@ -440,31 +439,17 @@
         var(--bg);
     }
     main {
-      max-width: 1240px;
+      max-width: 880px;
       padding: 40px 0 72px;
       gap: 40px;
     }
     .px { padding-left: 40px; padding-right: 40px; }
 
-    .top-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
-      grid-template-areas:
-        "hero faq"
-        "plans faq";
-      column-gap: 48px;
-      row-gap: 32px;
-      align-items: start;
-      padding: 0 40px;
-    }
-    .hero-col { grid-area: hero; gap: 28px; }
-    .hero-col .px { padding-left: 0; padding-right: 0; }
+    .top-layout { gap: 32px; }
+    .hero-col { gap: 28px; }
 
-    .top-layout > .plans { grid-area: plans; padding: 0; }
-    .top-layout > .faq { grid-area: faq; padding: 0; margin-top: 0; }
-
-    .carousel { padding: 0; }
-    .carousel .slide { flex-basis: 100%; }
+    .carousel { padding: 0 40px; }
+    .carousel .slide { flex-basis: calc(100% - 80px); }
     .carousel-wrap { gap: 18px; }
 
     h1 { font-size: 36px; letter-spacing: -0.03em; }
@@ -477,11 +462,8 @@
       gap: 16px;
     }
 
-    .faq h2 {
-      font-size: 20px;
-      margin-top: 0;
-    }
-    .faq details:first-of-type { border-top: none; padding-top: 0; }
+    .faq h2 { font-size: 20px; }
+    .faq { margin-top: 8px; }
 
     .plan { padding: 22px; }
     .plan-name { font-size: 20px; }
@@ -537,7 +519,6 @@
             </svg>
             Free sample
           </span>
-          <span class="info-sep"></span>
           <span class="info-right">
             <span class="info-avatar"><img src="images/avatar.jpg" alt="" /></span>
             By Leon Helg
