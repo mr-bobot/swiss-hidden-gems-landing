@@ -427,47 +427,36 @@
         var(--bg);
     }
     main {
-      max-width: 1080px;
+      max-width: 880px;
       padding: 40px 0 72px;
-      gap: 56px;
+      gap: 40px;
     }
     .px { padding-left: 40px; padding-right: 40px; }
-    .header { padding-left: 40px; padding-right: 40px; }
 
-    .top-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 380px;
-      column-gap: 56px;
-      row-gap: 0;
-      align-items: start;
-      padding: 0 40px;
-    }
-    .hero-col { gap: 32px; position: sticky; top: 40px; }
-    .hero-col .px { padding-left: 0; padding-right: 0; }
+    /* Top section stays stacked */
+    .top-layout { gap: 40px; }
+    .hero-col { gap: 28px; }
+    .purchase-col { gap: 28px; }
 
-    .purchase-col {
-      gap: 32px;
-    }
-    .purchase-col .px { padding-left: 0; padding-right: 0; }
-
-    .carousel { padding: 0; }
-    .carousel .slide { flex-basis: 100%; }
+    .carousel { padding: 0 40px; }
+    .carousel .slide { flex-basis: calc(100% - 80px); }
     .carousel-wrap { gap: 18px; }
 
     h1 { font-size: 36px; letter-spacing: -0.03em; }
     .tagline { font-size: 18px; }
-    .desc { font-size: 15px; max-width: 560px; }
+    .desc { font-size: 15px; max-width: 640px; }
 
-    .faq { margin-top: 4px; }
-    .faq h2 { font-size: 18px; }
-
-    .fineprint, footer {
-      max-width: 720px;
-      margin-left: auto;
-      margin-right: auto;
+    /* Plan cards side by side */
+    .plans {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
     }
 
-    .plan { padding: 24px; }
+    .faq { margin-top: 8px; }
+    .faq h2 { font-size: 20px; }
+
+    .plan { padding: 22px; }
     .plan-name { font-size: 20px; }
     .plan-price b { font-size: 26px; }
   }
