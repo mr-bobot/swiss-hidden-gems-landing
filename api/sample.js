@@ -114,16 +114,20 @@ async function logSignup({ email, subscriberId, token, sentAt }) {
 }
 
 async function createResendContact(email) {
+  const audienceId = process.env.RESEND_SEGMENT_ID;
+  if (!audienceId) return;
   try {
     const { error } = await resend.contacts.create({
+      audienceId,
       email,
       unsubscribed: false,
     });
     if (error) {
-      console.error("Resend contact create failed:", JSON.stringify(error));
+      console.error("Resend contact error name:", error.name);
+      console.error("Resend contact error message:", error.message);
     }
   } catch (err) {
-    console.error("Resend contact create failed:", err);
+    console.error("Resend contact threw:", err?.message || String(err));
   }
 }
 
