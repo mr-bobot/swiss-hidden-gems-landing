@@ -118,7 +118,7 @@ async function createResendContact(email) {
     const payload = { email, unsubscribed: false };
     const segmentId = process.env.RESEND_SEGMENT_ID;
     if (segmentId) payload.segments = [segmentId];
-    await fetch("https://api.resend.com/contacts", {
+    const res = await fetch("https://api.resend.com/contacts", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
@@ -127,6 +127,10 @@ async function createResendContact(email) {
       body: JSON.stringify(payload),
       signal: AbortSignal.timeout(5000),
     });
+    if (!res.ok) {
+      const body = await res.text();
+      console.error("Resend contact create failed:", res.status, body);
+    }
   } catch (err) {
     console.error("Resend contact create failed:", err);
   }
