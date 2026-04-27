@@ -91,7 +91,7 @@ Get the full guide for $49: ${upsell}
 ${SITE}/imprint.html · ${SITE}/privacy.html
 `;
 
-async function logSignup({ email, subscriberId, token, sentAt, utm }) {
+async function logSignup({ email, subscriberId, token, sentAt, funnel, utm }) {
   const url = process.env.SHEETS_WEBHOOK_URL;
   if (!url) return;
   try {
@@ -105,6 +105,7 @@ async function logSignup({ email, subscriberId, token, sentAt, utm }) {
         email,
         subscriber_id: subscriberId || "",
         token,
+        funnel: funnel || "",
         utm_source: utm.source,
         utm_medium: utm.medium,
         utm_campaign: utm.campaign,
@@ -139,19 +140,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { email, subscriber_id, source, utm_source, utm_medium, utm_campaign } = req.body ?? {};
+  const { email, subscriber_id, funnel, utm_source, utm_medium, utm_campaign } = req.body ?? {};
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Invalid email" });
   }
 
-  const hasUtm = utm_source || utm_medium || utm_campaign;
-  const utm = hasUtm
-    ? { source: utm_source || "", medium: utm_medium || "", campaign: utm_campaign || "" }
-    : source
-    ? { source, medium: subscriber_id ? "dm" : "", campaign: "" }
-    : subscriber_id
-    ? { source: "manychat", medium: "dm", campaign: "" }
-    : { source: "", medium: "", campaign: "" };
+  const utm = {
+    source: utm_source || "",
+    medium: utm_medium || "",
+    campaign: utm_campaign || "",
+  };
 
   const token = crypto.randomBytes(12).toString("base64url");
   const link = subscriber_id
@@ -174,7 +172,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Email failed to send" });
     }
     const sideEffects = [
-      logSignup({ email, subscriberId: subscriber_id, token, sentAt, utm }),
+      logSignup({ email, subscriberId: subscriber_id, token, sentAt, funnel: funnel || "", utm }),
       createResendContact(email),
     ];
     if (subscriber_id) {
