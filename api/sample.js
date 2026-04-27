@@ -139,7 +139,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { email, subscriber_id, utm_source, utm_medium, utm_campaign } = req.body ?? {};
+  const { email, subscriber_id, source, utm_source, utm_medium, utm_campaign } = req.body ?? {};
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Invalid email" });
   }
@@ -147,6 +147,8 @@ export default async function handler(req, res) {
   const hasUtm = utm_source || utm_medium || utm_campaign;
   const utm = hasUtm
     ? { source: utm_source || "", medium: utm_medium || "", campaign: utm_campaign || "" }
+    : source
+    ? { source, medium: subscriber_id ? "dm" : "", campaign: "" }
     : subscriber_id
     ? { source: "manychat", medium: "dm", campaign: "" }
     : { source: "", medium: "", campaign: "" };
