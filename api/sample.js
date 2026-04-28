@@ -10,12 +10,15 @@ const SITE = "https://hikebeast.ch";
 const HERO_IMG = `${SITE}/images/thumb-free.jpg`;
 const FONT = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif";
 
-const buyLink = (token, subscriberId) => {
+// Email upsell points at the soft-sell /guide page (not /api/buy directly),
+// so we get a tracked "visited_guide_at" beat before they hit checkout.
+// /guide forwards t+s onto its own /api/buy CTAs so attribution carries through.
+const guideLink = (token, subscriberId) => {
   const params = new URLSearchParams();
   if (token) params.set("t", token);
   if (subscriberId) params.set("s", subscriberId);
   const qs = params.toString();
-  return qs ? `${SITE}/api/buy?${qs}` : `${SITE}/api/buy`;
+  return qs ? `${SITE}/guide?${qs}` : `${SITE}/guide`;
 };
 
 const greeting = (firstName) => firstName ? `Hey ${firstName},` : "Hey,";
@@ -159,7 +162,7 @@ export default async function handler(req, res) {
   const link = subscriber_id
     ? `${SITE}/api/g?t=${token}&s=${encodeURIComponent(subscriber_id)}`
     : `${SITE}/api/g?t=${token}`;
-  const upsell = buyLink(token, subscriber_id);
+  const upsell = guideLink(token, subscriber_id);
   const sentAt = new Date().toISOString();
 
   try {
