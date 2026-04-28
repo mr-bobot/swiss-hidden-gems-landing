@@ -4,7 +4,7 @@ import { addTag, setEmail } from "../lib/manychat.js";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = "Leon Helg <leon@hikebeast.ch>";
+const FROM = "Leon · Hikebeast <leon@hikebeast.ch>";
 const REPLY_TO = "leon@hikebeast.ch";
 const SITE = "https://hikebeast.ch";
 const HERO_IMG = `${SITE}/images/thumb-free.jpg`;
@@ -18,7 +18,9 @@ const buyLink = (token, subscriberId) => {
   return qs ? `${SITE}/api/buy?${qs}` : `${SITE}/api/buy`;
 };
 
-const html = (link, upsell) => `<!doctype html>
+const greeting = (firstName) => firstName ? `Hey ${firstName},` : "Hey,";
+
+const html = (link, upsell, firstName) => `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -37,7 +39,7 @@ const html = (link, upsell) => `<!doctype html>
           </tr>
           <tr>
             <td style="padding:32px;font-family:${FONT};color:#1d1d1f;line-height:1.5;letter-spacing:-0.01em;">
-              <p style="margin:0 0 16px;font-size:16px;">Hey,</p>
+              <p style="margin:0 0 16px;font-size:16px;">${greeting(firstName)}</p>
               <p style="margin:0 0 24px;font-size:16px;">Here is your download link to the free sample of the guide:</p>
               <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;">
                 <tr>
@@ -70,7 +72,7 @@ const html = (link, upsell) => `<!doctype html>
 </body>
 </html>`;
 
-const text = (link, upsell) => `Hey,
+const text = (link, upsell, firstName) => `${greeting(firstName)}
 
 Here is your download link to the free sample of the guide:
 
@@ -91,7 +93,7 @@ Get the full guide for $49: ${upsell}
 ${SITE}/imprint.html · ${SITE}/privacy.html
 `;
 
-async function logSignup({ email, subscriberId, token, sentAt, funnel, utm }) {
+async function logSignup({ email, firstName, subscriberId, token, sentAt, funnel, utm }) {
   const url = process.env.SHEETS_WEBHOOK_URL;
   if (!url) return;
   try {
@@ -103,6 +105,7 @@ async function logSignup({ email, subscriberId, token, sentAt, funnel, utm }) {
         secret: process.env.SHEETS_SECRET,
         sent_at: sentAt,
         email,
+        first_name: firstName || "",
         subscriber_id: subscriberId || "",
         token,
         funnel: funnel || "",
@@ -140,10 +143,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { email, subscriber_id, funnel, utm_source, utm_medium, utm_campaign } = req.body ?? {};
+  const { email, first_name, subscriber_id, funnel, utm_source, utm_medium, utm_campaign } = req.body ?? {};
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: "Invalid email" });
   }
+  const firstName = typeof first_name === "string" ? first_name.trim().slice(0, 60) : "";
 
   const utm = {
     source: utm_source || "",
@@ -163,16 +167,16 @@ export default async function handler(req, res) {
       from: FROM,
       to: email,
       replyTo: REPLY_TO,
-      subject: "Hidden Gems - Your download link is ready.",
-      html: html(link, upsell),
-      text: text(link, upsell),
+      subject: "Hidden Gems · Your download link is ready.",
+      html: html(link, upsell, firstName),
+      text: text(link, upsell, firstName),
     });
     if (error) {
       console.error("Resend error:", error);
       return res.status(500).json({ error: "Email failed to send" });
     }
     const sideEffects = [
-      logSignup({ email, subscriberId: subscriber_id, token, sentAt, funnel: funnel || "", utm }),
+      logSignup({ email, firstName, subscriberId: subscriber_id, token, sentAt, funnel: funnel || "", utm }),
       createResendContact(email),
     ];
     if (subscriber_id) {

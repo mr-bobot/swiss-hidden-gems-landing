@@ -4,6 +4,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /preview/
 
 # AI search crawlers — explicitly allowed for citation in generative answers
 User-agent: GPTBot
