@@ -147,6 +147,14 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     line-height: 1.5;
     letter-spacing: -0.005em;
   }
+  .lead-link {
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lead-link:active { opacity: 0.8; }
 
   /* Stacked sample pages. Aspect-ratio sized to ~2.3 pages so the third
      page peeks below the bottom edge — telegraphs that the reader is
@@ -400,7 +408,7 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   <header class="px hero">
     <p class="kicker">Free sample · Swiss Hidden Gems</p>
     <h1>Switzerland beyond the tourist map.</h1>
-    <p class="lead">15/100+ spots from my private guide. Scroll through the sample below or drop your email if I should send you a copy.</p>
+    <p class="lead">15/100+ spots from my private guide. Scroll through the sample below or drop your email if I should <a class="lead-link" id="leadLink" href="#saveCard">send you a copy</a>.</p>
   </header>
 
   <div class="reader" id="reader" aria-label="Swiss Hidden Gems sample · read">
@@ -655,6 +663,16 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   };
   document.getElementById("buyFullGuide").addEventListener("click", fireBuy);
   document.getElementById("driveLink").addEventListener("click", () => haptic(8));
+
+  // Inline "send you a copy" link → smooth-scroll the email card into view
+  // and focus the first input. Default anchor jump is overridden so the
+  // scroll lands smoothly on iOS too.
+  document.getElementById("leadLink").addEventListener("click", (e) => {
+    e.preventDefault();
+    haptic(8);
+    document.getElementById("saveCard").scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => firstNameInput.focus({ preventScroll: true }), 320);
+  });
 </script>
 </body>
 </html>
