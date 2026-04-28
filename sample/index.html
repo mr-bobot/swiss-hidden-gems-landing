@@ -372,6 +372,41 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     gap: 18px;
   }
 
+  /* Smooth state transition: bullets fade into "Sent to your inbox." in
+     the same slot, while inputs collapse and the card height shrinks. */
+  .feat,
+  .success-row {
+    transition: opacity 220ms ease;
+  }
+  .plan-pre.unlocked .feat {
+    opacity: 0;
+    pointer-events: none;
+    /* display:none kicks in after the fade via JS so layout shifts smoothly */
+  }
+
+  ul.feat,
+  form.unlock-form input[type="text"],
+  form.unlock-form input[type="email"] {
+    transition: opacity 220ms ease, max-height 320ms ease,
+                padding 320ms ease, margin 320ms ease, border-width 280ms ease;
+  }
+  form.unlock-form {
+    transition: gap 320ms ease;
+  }
+  form.unlock-form.collapsed {
+    gap: 0;
+  }
+  form.unlock-form.collapsed input[type="text"],
+  form.unlock-form.collapsed input[type="email"] {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    pointer-events: none;
+  }
+  form.unlock-form.collapsed .fineprint { display: none; }
+
   /* Buttons */
   .cta-primary {
     display: flex;
@@ -595,10 +630,18 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
           </div>
           <div class="plan-price"><b>Free</b></div>
         </div>
-        <ul class="feat">
+        <ul class="feat" id="featList">
           <li><span class="ico">✓</span>15/100+ spots</li>
           <li><span class="ico">✓</span>Unlocked instantly, also sent by email</li>
         </ul>
+        <div class="success-row" id="sentRow" aria-live="polite" hidden>
+          <span class="success-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="5 12 10 17 19 8"/>
+            </svg>
+          </span>
+          <span>Sent to your inbox.</span>
+        </div>
 
       <form class="unlock-form" id="unlockForm" action="/api/sample" method="POST" novalidate
             data-drive-href="https://drive.google.com/file/d/1tJsyRtTeOPaQ3-fwoFD34lkqICnxlZz9/view?usp=share_link">
@@ -622,14 +665,6 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
           required
           placeholder="Email address" />
         <input type="hidden" id="subscriberId" name="subscriber_id" value="" />
-        <div class="success-row" id="sentRow" aria-live="polite" hidden>
-          <span class="success-check" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="5 12 10 17 19 8"/>
-            </svg>
-          </span>
-          <span>Sent to your inbox.</span>
-        </div>
         <button class="cta-primary" id="unlockBtn" type="submit">Unlock the sample</button>
         <p class="fineprint" id="fineprint">No spam. Unsubscribe anytime.</p>
       </form>
@@ -682,6 +717,7 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   const subscriberInput = document.getElementById("subscriberId");
   const sentRow = document.getElementById("sentRow");
   const fineprint = document.getElementById("fineprint");
+  const featList = document.getElementById("featList");
 
   const params = new URLSearchParams(window.location.search);
   const utmSource = params.get("utm_source") || "";
@@ -745,9 +781,8 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     if (e.key === "Enter") { e.preventDefault(); emailInput.focus(); }
   });
 
-  // Animated dots cycle "Unlocking..." → ".." → "." while the request is in
-  // flight, so the user sees the button is doing something. Cleared by
-  // showSuccess() or the catch branch below.
+  // Animated dots cycle "." → ".." → "..." → "" → repeat while the request
+  // is in flight. Cleared by showSuccess() or the catch branch below.
   let loadingTimer = null;
   const stopLoadingTimer = () => {
     if (loadingTimer) { clearInterval(loadingTimer); loadingTimer = null; }
@@ -755,7 +790,7 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
   const setBtnLoading = (loading) => {
     if (loading) {
       unlockBtn.disabled = true;
-      const frames = ["Unlocking...", "Unlocking..", "Unlocking."];
+      const frames = ["Unlocking.", "Unlocking..", "Unlocking...", "Unlocking"];
       let i = 0;
       unlockBtn.textContent = frames[0];
       stopLoadingTimer();
@@ -770,23 +805,33 @@ src="https://www.facebook.com/tr?id=1658000685240569&ev=PageView&noscript=1"
     }
   };
 
+  // Crossfade the bullet list and the "Sent to your inbox." row in the same
+  // layout slot, while the form inputs collapse smoothly. Avoids the abrupt
+  // height jump the old approach caused.
   const showSuccess = () => {
     stopLoadingTimer();
-    // Flip the pill into "Open in Drive" mode (icon swap + label + click role).
     unlocked = true;
+
+    // Pill → "Open in Drive"
     unlockPill.setAttribute("aria-label", "Open in Google Drive");
     unlockPillLabel.textContent = "Open in Drive";
     unlockPill.querySelector(".pill-ico-locked").style.display = "none";
     unlockPill.querySelector(".pill-ico-open").style.display = "";
-    // In-place form transformation: hide the inputs + fineprint, reveal the
-    // sent-row, swap button copy to "Open in Google Drive". Bullet points
-    // and card head stay exactly as they were.
-    firstNameInput.style.display = "none";
-    emailInput.style.display = "none";
-    fineprint.style.display = "none";
-    sentRow.hidden = false;
+
+    // Phase 1 (parallel): bullets fade out, inputs collapse via .collapsed
+    planPre.classList.add("unlocked");
+    unlockForm.classList.add("collapsed");
     unlockBtn.disabled = false;
     unlockBtn.textContent = "Open in Google Drive";
+
+    // Phase 2 (after the bullets fade): take feat out of layout, fade in the
+    // sent-row in the same slot. 240ms matches the .feat opacity transition.
+    setTimeout(() => {
+      featList.style.display = "none";
+      sentRow.hidden = false;
+      sentRow.style.opacity = "0";
+      requestAnimationFrame(() => { sentRow.style.opacity = "1"; });
+    }, 240);
   };
 
   unlockForm.addEventListener("submit", async (e) => {
